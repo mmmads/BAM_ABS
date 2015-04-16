@@ -1,7 +1,7 @@
 Introduction
 ============
 
-Scoring_multiread is a tool which simulates a Bayesian model that computes the posterior probability of mapping a multiread to each candidate genomic location, taking advantage of uniquely aligned reads. The inputs of this tool are a set of ambiguously mapped reads and a set of uniquely mapped reads from Bismark tool; and the output is the most probable genomic locations for those ambiguously mapped reads along with the calculated probability.
+BAM_ABS is a tool which simulates a Bayesian model that computes the posterior probability of mapping a multiread to each candidate genomic location, taking advantage of uniquely aligned reads. The inputs of this tool are a set of ambiguously mapped reads and a set of uniquely mapped reads from Bismark tool; and the output is the most probable genomic locations for those ambiguously mapped reads along with the calculated probability.
 
 Compilation
 ===========
