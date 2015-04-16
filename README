@@ -1,0 +1,60 @@
+Introduction
+============
+
+Scoring_multiread is a tool which simulates a Bayesian model that computes the posterior probability of mapping a multiread to each candidate genomic location, taking advantage of uniquely aligned reads. The inputs of this tool are a set of ambiguously mapped reads and a set of uniquely mapped reads from Bismark tool; and the output is the most probable genomic locations for those ambiguously mapped reads along with the calculated probability.
+
+Compilation
+===========
+
+If you received Scoring_multiread as a compressed file, first decompress it. Then use the following commands to create the executable file:
+	make clean
+	make
+	
+Execution
+==========
+
+a) Pre-process the input data:
+==============================
+Step 1: Run Samtools to get overlapped unique reads in sam format
+	Input: ambiguous reads in bed format, unique reads in bam format
+	Output: Unique reads in sam format with mapping quality greater than a given value
+samtools view -L ambiguous_read_file.bed all_unique_reads.bam -q 20 > unique_reads.sam   #Only retain reads with MAQ>20 with no header
+
+Step 2: Run the following command to get rid of duplicates from the unique reads
+	Input: Unique reads in sam format (Output of step 1)
+	Output: Unique reads with no duplicate
+sort -n -r -k3,3 -k4,4 -k5,5 unique_reads.sam|uniq -u > unique_reads_nodup.sam
+
+Step 3: Run Convert_to_bed.pl to convert unique read file to bed format.
+	Input: Unique reads with no duplicate in sam format (Output of step 2)
+	Output: Unique reads with no duplicate in bed format
+perl Convert_to_bed.pl unique_reads_nodup.sam
+
+Setp 4: To get overlapped unique reads by using bedtools, run the following command in the bedtools folder
+	Input -a: Ambiguous reads in bed format
+	Input -b: Unique reads in bed format (Output of step 3)
+	Output: All overlapping unique reads
+./intersectBed -a ambiguous_read_file.bed -b unique_read_file.bed -wb -wa > unique_overlap_read_file.txt
+
+b) Score the multi-reads:
+=========================
+Run main.exe in Scoring_multiread folder using the following command:
+	./main file.fa ambiguous_read_file unique_overlap_read_file
+Here,
+	Input argument 1 (file.fa): The reference file in Fasta format
+	Input argument 2 (ambiguous_read_file): The file containing all ambiguously mapped reads from Bismark tool
+	Input argument 3 (unique_overlap_read_file): The file containing all uniquely mapped reads wich are overlapped with multi-reads (Output of step 4)
+
+Snp and Methylation Rate
+========================
+	
+Scoring_multiread folder also contains a file "snp_methylation_rate.txt". This file contains snp and methylation rate. If the user wants to change any rate, he or she needs to modify this file. Please do not delete this file or do not change the format of this file, only modify the rate part.
+
+Result
+======
+
+This tool will generate two output files: All_reads_with_probability.txt and Reads_with_highest_probability.txt. All_reads_with_probability.txt contains each multi-read with its probability. Reads_with_highest_probability.txt contains each multi-read along with the most probable genomic location and the corresponding probability.
+
+System Requirement
+==================
+GCC: 4.4.7, perl, samtools, bedtools, operating system: Linux
