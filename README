@@ -6,7 +6,7 @@ BAM_ABS is a tool which simulates a Bayesian model that computes the posterior p
 Compilation
 ===========
 
-If you received Scoring_multiread as a compressed file, first decompress it. Then use the following commands to create the executable file:
+If you received BAM_ABS as a compressed file, first decompress it. Then use the following commands to create the executable file:
 	make clean
 	make
 	
