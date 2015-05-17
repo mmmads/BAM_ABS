@@ -1,5 +1,5 @@
 // ==========================================================================
-//                             scoring_multiread
+//                             BAM_ABS
 // ==========================================================================
 
 //
@@ -218,6 +218,7 @@ double sum(double observedProb[], int size)
 
 int main(int argc, char const ** argv)
 {
+	cout << "Start processing...\n";	
 	if (argc != 4)
     {
         cout << "USAGE: ./main file.fa ambiguous_read_file unique_overlap_read_file\n";
@@ -397,16 +398,16 @@ int main(int argc, char const ** argv)
 	    return 1;
 	}
 
-	ofstream outputfile;
-  	outputfile.open ("All_reads_with_probability.txt");
+	//ofstream outputfile;
+  	//outputfile.open ("All_reads_with_probability.txt");
 	ofstream outputfile1;
-  	outputfile1.open ("Reads_with_highest_probability.txt");
+  	outputfile1.open ("Reads_with_highest_probable_location.sam");
 
-	string header = "#All multi-reads in sam format with probability(999 means probability cannot be calculated)\n";
-	string header1 = "#Multi-reads having the highest probability\n";
+	//string header = "#All multi-reads in sam format with probability(999 means probability cannot be calculated)\n";
+	//string header1 = "#Multi-reads having the highest probability\n";
 
-	outputfile << header;
-	outputfile1 << header1;
+	//outputfile << header;
+	//outputfile1 << header1;
 
     mapAmbIter m_it, s_it;
     mapUniIter mUni_it, sUni_it;
@@ -588,8 +589,8 @@ int main(int argc, char const ** argv)
 				double likelihood = sum(posterior, seq.length());
 				//output = theKey + "\t" + tokens.at(1) + "_" + tokens.at(2) + "\t";
 				output = theKey + "\t" + theValue + "\t";
-				outputfile << output;
-				outputfile << std::setprecision(15) << likelihood << "\n";
+				//outputfile << output;
+				//outputfile << std::setprecision(15) << likelihood << "\n";
 				likelihoodArr.push_back(likelihood);
 				likelihoodMap[likelihood] = output;
             }
@@ -597,8 +598,8 @@ int main(int argc, char const ** argv)
             {
 				//output = theKey + "\t" + tokens.at(1) + "_" + tokens.at(2) + "\t";
 				output = theKey + "\t" + theValue + "\t";
-				outputfile << output;
-				outputfile << 999 << "\n";
+				//outputfile << output;
+				//outputfile << 999 << "\n";
             }
 		
         }//end for
@@ -606,14 +607,14 @@ int main(int argc, char const ** argv)
 			vector<double>::const_iterator it;
 			it = std::max_element(likelihoodArr.begin(), likelihoodArr.end());
 			std::map<double, std::string>::const_iterator search = likelihoodMap.find(*it);
-			outputfile1 << search->second;
-			outputfile1 << std::setprecision(15) << *it << "\n";	
+			outputfile1 << search->second << "\n";
+			//outputfile1 << std::setprecision(15) << *it << "\n";	
 		}
     }//end for
 
-	outputfile.close(); 
+	//outputfile.close(); 
 	outputfile1.close();
-	cout << "Output is written in All_reads_with_probability.txt and Reads_with_highest_probability.txt\n"; 
+	cout << "Output is written in Reads_with_highest_probable_location.sam\n"; 
 	
     return 0;
 }

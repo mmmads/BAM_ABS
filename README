@@ -53,7 +53,7 @@ Scoring_multiread folder also contains a file "snp_methylation_rate.txt". This f
 Result
 ======
 
-This tool will generate two output files: All_reads_with_probability.txt and Reads_with_highest_probability.txt. All_reads_with_probability.txt contains each multi-read with its probability. Reads_with_highest_probability.txt contains each multi-read along with the most probable genomic location and the corresponding probability.
+This tool will generate one output file: Reads_with_highest_probable_location.sam. Reads_with_highest_probable_location.sam contains each multi-read along with the most probable genomic location in sam file format.
 
 System Requirement
 ==================

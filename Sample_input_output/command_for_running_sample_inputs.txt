@@ -1,0 +1,1 @@
+./main $BAM_ABS_Home$/mm10.fa $BAM_ABS_Home$/Sample_input_output/input/L5_10_sample0.1_ambiguous_final $BAM_ABS_Home$/Sample_input_output/input/L5_sample0.1_10_unique_overlap.txt
