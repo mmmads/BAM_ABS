@@ -1,3 +1,5 @@
+Author: Saima-tithi and Hong Tran
+
 Introduction
 ============
 
@@ -54,6 +56,18 @@ Result
 ======
 
 This tool will generate one output file: Reads_with_highest_probable_location.sam. Reads_with_highest_probable_location.sam contains each multi-read along with the most probable genomic location in sam file format.
+
+Example
+=======
+
+Input file: 1) Multiread file (in fastq format): L5_10_sample0.1_ambiguous_final
+	    2) Overlap uniquely mapped reads: L5_sample0.1_10_unique_overlap.txt
+
+Output file: Multireads aligned to highest probable locations (in SAM format): Reads_with_highest_probable_location.sam
+
+BAM-ABS command line:
+
+./main $BAM_ABS_Home$/mm10.fa $BAM_ABS_Home$/Sample_input_output/input/L5_10_sample0.1_ambiguous_final $BAM_ABS_Home$/Sample_input_output/input/L5_sample0.1_10_unique_overlap.txt
 
 System Requirement
 ==================
