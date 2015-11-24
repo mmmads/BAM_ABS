@@ -57,7 +57,7 @@ Here,
 Snp and Methylation Rate
 ========================
 	
-Scoring_multiread folder also contains a file "snp_methylation_rate.txt". This file contains snp and methylation rate. If the user wants to change any rate, he or she needs to modify this file. Please do not delete this file or do not change the format of this file, only modify the rate part if necessary.
+BAM_ABS folder also contains a file "snp_methylation_rate.txt". This file contains snp and methylation rate. If the user wants to change any rate, he or she needs to modify this file. Please do not delete this file or do not change the format of this file, only modify the rate part if necessary.
 
 Result
 ======
