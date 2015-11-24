@@ -7,7 +7,7 @@ BAM_ABS is a tool which simulates a Bayesian model that computes the posterior p
 
 System Requirement
 ==================
-This software package has been tested on Ubuntu 14.04 LTS. To run this program, user needs to install samtools, perl, bedtools, and g++ on his/her Linux/UNIX system. This program has been tested using g++ 4.8.4.
+This software package has been tested on Ubuntu 14.04 LTS. To run this program, user needs to have samtools, perl, bedtools, and g++ installed on his/her Linux/UNIX system. This program has been tested using g++ 4.8.4.
 
 Compilation
 ===========
@@ -15,7 +15,7 @@ Compilation
 If you receive BAM_ABS as a compressed file, first decompress it. Then use the following commands to create the executable file:
 	make clean
 	make
-For this command to work, the user needs g++ installed in his/her system. You can use the following command to install g++:
+For this command to work, the user needs g++ installed on his/her system. You can use the following command to install g++:
 	sudo apt-get install g++
 	
 Execution
@@ -23,7 +23,7 @@ Execution
 
 a) Pre-process the input data:
 ==============================
-Step 1: Samtools need to be installed, prior to execute this step. After installing Samtools, run Samtools to get overlapped unique reads in sam format
+Step 1: Prior to execute this step, Samtools need to be installed on the system. After installing Samtools, run Samtools to get overlapped unique reads in sam format
 	Input: ambiguous reads in bed format, unique reads in bam format
 	Output: Unique reads in sam format with mapping quality greater than a given value
 samtools view -L ambiguous_read_file.bed all_unique_reads.bam -q 20 > unique_reads.sam   #Only retain reads with MAQ(Mapping Quality)>20 with no header
@@ -38,7 +38,7 @@ Step 3: If Perl is not installed in the system, then prior to this step, Perl ne
 	Output: Unique reads with no duplicate in bed format
 perl Convert_to_bed.pl unique_reads_nodup.sam
 
-Setp 4: Bedtools need to be installed, prior to execute this step. After installing Bedtools, to get overlapped unique reads by using Bedtools, run the following command in the bedtools folder
+Setp 4: Prior to execute this step, Bedtools need to be installed. After installing Bedtools, to get overlapped unique reads by using Bedtools, run the following command in the bedtools folder
 	Input -a: Ambiguous reads in bed format
 	Input -b: Unique reads in bed format (Output of step 3)
 	Output: All overlapping unique reads in txt format
@@ -46,7 +46,7 @@ Setp 4: Bedtools need to be installed, prior to execute this step. After install
 
 b) Score the multi-reads:
 =========================
-Run main.exe in Scoring_multiread folder using the following command:
+Run main.exe in BAM_ABS folder using the following command:
 	./main file.fa ambiguous_read_file unique_overlap_read_file.txt
 Here,
 	Input argument 1 (file.fa): The reference file in Fasta format
