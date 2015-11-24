@@ -23,7 +23,7 @@ Execution
 
 a) Pre-process the input data:
 ==============================
-Step 1: Samtools needs to be installed, prior to execute this step. After installing Samtools, run Samtools to get overlapped unique reads in sam format
+Step 1: Samtools need to be installed, prior to execute this step. After installing Samtools, run Samtools to get overlapped unique reads in sam format
 	Input: ambiguous reads in bed format, unique reads in bam format
 	Output: Unique reads in sam format with mapping quality greater than a given value
 samtools view -L ambiguous_read_file.bed all_unique_reads.bam -q 20 > unique_reads.sam   #Only retain reads with MAQ(Mapping Quality)>20 with no header
@@ -38,7 +38,7 @@ Step 3: If Perl is not installed in the system, then prior to this step, Perl ne
 	Output: Unique reads with no duplicate in bed format
 perl Convert_to_bed.pl unique_reads_nodup.sam
 
-Setp 4: Bedtools needs to be installed, prior to execute this step. After installing Bedtools, to get overlapped unique reads by using Bedtools, run the following command in the bedtools folder
+Setp 4: Bedtools need to be installed, prior to execute this step. After installing Bedtools, to get overlapped unique reads by using Bedtools, run the following command in the bedtools folder
 	Input -a: Ambiguous reads in bed format
 	Input -b: Unique reads in bed format (Output of step 3)
 	Output: All overlapping unique reads in txt format
