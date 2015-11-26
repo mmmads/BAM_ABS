@@ -42,9 +42,9 @@ perl Convert_to_bed.pl unique_reads_nodup.sam
 ```
 
 _Setp 4_: Prior to execute this step, Bedtools need to be installed. After installing Bedtools, to get overlapped unique reads by using Bedtools, run the following command in the bedtools folder
-* Input -a: Ambiguous reads in bed format
-* Input -b: Unique reads in bed format (Output of step 3)
-* Output: All overlapping unique reads in txt format
+* Input argument 1 (ambiguous_read_file.bed): Ambiguous reads in bed format
+* Input argument 2 (unique_reads_nodup.bed): Unique reads in bed format (Output of step 3)
+* Output (unique_overlap_read_file.txt): All overlapping unique reads in txt format
 ```
 ./intersectBed -a ambiguous_read_file.bed -b unique_reads_nodup.bed -wb -wa > unique_overlap_read_file.txt
 ```
