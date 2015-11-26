@@ -35,24 +35,30 @@ sort -n -r -k3,3 -k4,4 -k5,5 unique_reads.sam|uniq -u > unique_reads_nodup.sam
 ```
 
 Step 3: If Perl is not installed in the system, then prior to this step, Perl needs to be installed. Run Convert_to_bed.pl to convert unique read file to bed format.
-	Input: Unique reads with no duplicate in sam format (Output of step 2)
-	Output: Unique reads with no duplicate in bed format
+* Input: Unique reads with no duplicate in sam format (Output of step 2)
+* Output: Unique reads with no duplicate in bed format
+```
 perl Convert_to_bed.pl unique_reads_nodup.sam
+```
 
 Setp 4: Prior to execute this step, Bedtools need to be installed. After installing Bedtools, to get overlapped unique reads by using Bedtools, run the following command in the bedtools folder
-	Input -a: Ambiguous reads in bed format
-	Input -b: Unique reads in bed format (Output of step 3)
-	Output: All overlapping unique reads in txt format
+* Input -a: Ambiguous reads in bed format
+* Input -b: Unique reads in bed format (Output of step 3)
+* Output: All overlapping unique reads in txt format
+```
 ./intersectBed -a ambiguous_read_file.bed -b unique_reads_nodup.bed -wb -wa > unique_overlap_read_file.txt
+```
 
 ####b) Score the multi-reads:
 Run main.exe in BAM_ABS folder using the following command:
+```
 ./main file.fa ambiguous_read_file unique_overlap_read_file.txt
+```
 Here,
-Input argument 1 (file.fa): The reference file in Fasta format
-Input argument 2 (ambiguous_read_file): The file containing all ambiguously mapped reads from Bismark tool
-Input argument 3 (unique_overlap_read_file): The file containing all uniquely mapped reads which are overlapped with multi-reads or ambiguously mapped reads. This file is the output of step 4.
-Output (Reads_with_highest_probable_location.sam): Output file contains multi-reads along with the most probable genomic location in sam file format. This file only contains those multi-reads for which a probable genomic location can be calculated using our model.
+* Input argument 1 (file.fa): The reference file in Fasta format
+* Input argument 2 (ambiguous_read_file): The file containing all ambiguously mapped reads from Bismark tool
+* Input argument 3 (unique_overlap_read_file): The file containing all uniquely mapped reads which are overlapped with multi-reads or ambiguously mapped reads. This file is the output of step 4.
+* Output (Reads_with_highest_probable_location.sam): Output file contains multi-reads along with the most probable genomic location in sam file format. This file only contains those multi-reads for which a probable genomic location can be calculated using our model.
 
 ###Snp and Methylation Rate
 BAM_ABS folder also contains a file "snp_methylation_rate.txt". This file contains snp and methylation rate. If the user wants to change any rate, he or she needs to modify this file. Please do not delete this file or do not change the format of this file, only modify the rate part if necessary.
@@ -61,11 +67,12 @@ BAM_ABS folder also contains a file "snp_methylation_rate.txt". This file contai
 This tool will generate one output file: Reads_with_highest_probable_location.sam. Reads_with_highest_probable_location.sam contains multi-reads along with the most probable genomic location in sam file format.
 
 ###Example
-Input file: 1) Multiread file (in fastq format): L5_10_sample0.1_ambiguous_final
-2) Overlap uniquely mapped reads: L5_sample0.1_10_unique_overlap.txt
-
-Output file: Multireads aligned to highest probable locations (in SAM format): Reads_with_highest_probable_location.sam
+* Input file:
+ 1. Multiread file (in fastq format): L5_10_sample0.1_ambiguous_final
+ 2. Overlap uniquely mapped reads: L5_sample0.1_10_unique_overlap.txt
+* Output file: Multireads aligned to highest probable locations (in SAM format): Reads_with_highest_probable_location.sam
 
 BAM-ABS command line for the given example:
-
+```
 ./main $BAM_ABS_Home$/mm10.fa $BAM_ABS_Home$/Sample_input_output/input/L5_10_sample0.1_ambiguous_final $BAM_ABS_Home$/Sample_input_output/input/L5_sample0.1_10_unique_overlap.txt
+```
