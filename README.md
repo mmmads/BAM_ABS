@@ -13,8 +13,10 @@ Compilation
 ===========
 
 If you receive BAM_ABS as a compressed file, first decompress it. Then use the following commands to create the executable file:
-	**make clean**
+	```
+	make clean
 	make
+	```
 For this command to work, the user needs g++ installed on his/her system. You can use the following command to install g++:
 	sudo apt-get install g++
 	
