@@ -19,7 +19,7 @@ sudo apt-get install g++
 	
 ####Execution
 #####a) Pre-process the input data:
-Step 1: Prior to execute this step, Samtools need to be installed on the system. After installing Samtools, run Samtools to get overlapped unique reads in sam format
+_Step 1_: Prior to execute this step, Samtools need to be installed on the system. After installing Samtools, run Samtools to get overlapped unique reads in sam format
 * Input: ambiguous reads in bed format, unique reads in bam format
 * Output: Unique reads in sam format with mapping quality greater than a given value
 ```
@@ -27,21 +27,21 @@ samtools view -L ambiguous_read_file.bed all_unique_reads.bam -q 20 > unique_rea
 ```
 The above command will only retain reads with MAQ(Mapping Quality) > 20 with no header
 
-Step 2: Run the following command to get rid of duplicates from the unique reads
+_Step 2_: Run the following command to get rid of duplicates from the unique reads
 * Input: Unique reads in sam format (Output of step 1)
 * Output: Unique reads with no duplicate in sam format
 ```
 sort -n -r -k3,3 -k4,4 -k5,5 unique_reads.sam|uniq -u > unique_reads_nodup.sam
 ```
 
-Step 3: If Perl is not installed in the system, then prior to this step, Perl needs to be installed. Run Convert_to_bed.pl to convert unique read file to bed format.
+_Step 3_: If Perl is not installed in the system, then prior to this step, Perl needs to be installed. Run Convert_to_bed.pl to convert unique read file to bed format.
 * Input: Unique reads with no duplicate in sam format (Output of step 2)
 * Output: Unique reads with no duplicate in bed format
 ```
 perl Convert_to_bed.pl unique_reads_nodup.sam
 ```
 
-Setp 4: Prior to execute this step, Bedtools need to be installed. After installing Bedtools, to get overlapped unique reads by using Bedtools, run the following command in the bedtools folder
+_Setp 4_: Prior to execute this step, Bedtools need to be installed. After installing Bedtools, to get overlapped unique reads by using Bedtools, run the following command in the bedtools folder
 * Input -a: Ambiguous reads in bed format
 * Input -b: Unique reads in bed format (Output of step 3)
 * Output: All overlapping unique reads in txt format
