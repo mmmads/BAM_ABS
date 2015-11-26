@@ -69,7 +69,7 @@ This tool will generate one output file: Reads_with_highest_probable_location.sa
 
 ####Example
 * Input file:
- 1. The reference file for mouse (in Fasta format): mm10.fa (you can download this file from http://hgdownload.cse.ucsc.edu/downloads.html)
+ 1. The reference file for mouse (in Fasta format): mm10.fa (you can download this file from http://hgdownload.cse.ucsc.edu/downloads.html#mouse)
  2. Multiread file (in Fastq format): L5_10_sample0.1_ambiguous_final
  3. Overlap uniquely mapped reads: L5_sample0.1_10_unique_overlap.txt
 * Output file: Multireads aligned to highest probable locations (in SAM format): Reads_with_highest_probable_location.sam
