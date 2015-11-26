@@ -1,12 +1,10 @@
 Author: Saima Sultana Tithi and Hong Tran
 
-Introduction
-============
+#Introduction
 
 BAM_ABS is a tool which simulates a Bayesian model that computes the posterior probability of mapping a multiread to each candidate genomic location, taking advantage of uniquely aligned reads. The inputs of this tool are a set of ambiguously mapped reads and a set of uniquely mapped reads from Bismark tool; and the output is the most probable genomic locations for those ambiguously mapped reads. The most probable genomic location is the location which has the highest calculated probability.
 
-System Requirement
-==================
+##System Requirement
 This software package has been tested on Ubuntu 14.04 LTS. To run this program, user needs to have samtools, perl, bedtools, and g++ installed on his/her Linux/UNIX system. This program has been tested using g++ 4.8.4.
 
 Compilation
