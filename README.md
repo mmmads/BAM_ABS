@@ -13,10 +13,8 @@ Compilation
 ===========
 
 If you receive BAM_ABS as a compressed file, first decompress it. Then use the following commands to create the executable file:
-
 	```
 	make clean
-	
 	make
 	```
 	
