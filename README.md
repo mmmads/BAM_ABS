@@ -28,14 +28,14 @@ samtools view -L ambiguous_read_file.bed all_unique_reads.bam -q 20 > unique_rea
 The above command will only retain reads with MAQ(Mapping Quality) > 20 with no header
 
 _Step 2_: Run the following command to get rid of duplicates from the unique reads
-* Input: Unique reads in sam format (Output of step 1)
+* Input: Unique reads in sam format (output of step 1)
 * Output: Unique reads with no duplicate in sam format
 ```
 sort -n -r -k3,3 -k4,4 -k5,5 unique_reads.sam|uniq -u > unique_reads_nodup.sam
 ```
 
 _Step 3_: If Perl is not installed in the system, then prior to this step, Perl needs to be installed. Run Convert_to_bed.pl to convert unique read file to bed format.
-* Input: Unique reads with no duplicate in sam format (Output of step 2)
+* Input: Unique reads with no duplicate in sam format (output of step 2)
 * Output: Unique reads with no duplicate in bed format
 ```
 perl Convert_to_bed.pl unique_reads_nodup.sam
@@ -43,7 +43,7 @@ perl Convert_to_bed.pl unique_reads_nodup.sam
 
 _Setp 4_: Prior to execute this step, Bedtools need to be installed. After installing Bedtools, to get overlapped unique reads by using Bedtools, run the following command in the bedtools folder
 * Input argument 1 (ambiguous_read_file.bed): Ambiguous reads in bed format
-* Input argument 2 (unique_reads_nodup.bed): Unique reads in bed format (Output of step 3)
+* Input argument 2 (unique_reads_nodup.bed): Unique reads in bed format (output of step 3)
 * Output (unique_overlap_read_file.txt): All overlapping unique reads in txt format
 ```
 ./intersectBed -a ambiguous_read_file.bed -b unique_reads_nodup.bed -wb -wa > unique_overlap_read_file.txt
