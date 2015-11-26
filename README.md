@@ -18,6 +18,7 @@ If you receive BAM_ABS as a compressed file, first decompress it. Then use the f
 	make
 	
 For this command to work, the user needs g++ installed on his/her system. You can use the following command to install g++:
+
 	sudo apt-get install g++
 	
 Execution
