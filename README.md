@@ -74,7 +74,7 @@ This tool will generate one output file: Reads_with_highest_probable_location.sa
  3. Overlapping uniquely mapped reads: L5_sample0.1_10_unique_overlap.txt
 * Output file: Multireads aligned to highest probable locations (in SAM format): Reads_with_highest_probable_location.sam
 
-BAM-ABS command for the given example:
+BAM_ABS command for the given example:
 ```
 ./main $BAM_ABS_Home$/mm10.fa $BAM_ABS_Home$/Sample_input_output/input/L5_10_sample0.1_ambiguous_final $BAM_ABS_Home$/Sample_input_output/input/L5_sample0.1_10_unique_overlap.txt
 ```
