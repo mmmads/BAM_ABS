@@ -20,7 +20,8 @@ sudo apt-get install g++
 ####Execution
 #####a) Pre-process the input data:
 _Step 1_: Prior to execute this step, Samtools need to be installed on the system. After installing Samtools, run Samtools to get overlapped unique reads in sam format
-* Input: ambiguous reads in bed format, unique reads in bam format (output of Bismark tool)
+* Input argument 1: Ambiguous reads in bed format (output of Bismark tool)
+* Input argument 2: Unique reads in bam format (output of Bismark tool)
 * Output: Unique reads in sam format with mapping quality greater than a given value
 ```
 samtools view -L ambiguous_read_file.bed all_unique_reads.bam -q 20 > unique_reads.sam
@@ -43,7 +44,7 @@ perl Convert_to_bed.pl unique_reads_nodup.sam
 
 _Setp 4_: Prior to execute this step, Bedtools need to be installed. After installing Bedtools, to get overlapped unique reads by using Bedtools, run the following command in the bedtools folder
 * Input argument 1 (ambiguous_read_file.bed): Ambiguous reads in bed format
-* Input argument 2 (unique_reads_nodup.bed): Unique reads in bed format (output of step 3)
+* Input argument 2 (unique_reads_nodup.bed): Unique reads with no duplicate in bed format (output of step 3)
 * Output (unique_overlap_read_file.txt): All overlapping unique reads in txt format
 ```
 ./intersectBed -a ambiguous_read_file.bed -b unique_reads_nodup.bed -wb -wa > unique_overlap_read_file.txt
