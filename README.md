@@ -56,7 +56,7 @@ Run main.exe in BAM_ABS folder using the following command:
 ```
 Here,
 * Input argument 1 (file.fa): The reference file in Fasta format
-* Input argument 2 (ambiguous_read_file): The file containing all ambiguously mapped reads from Bismark tool in Fastq format
+* Input argument 2 (ambiguous_read_file): The file containing all ambiguously mapped reads in Fastq format
 * Input argument 3 (unique_overlap_read_file): The file containing all uniquely mapped reads which are overlapped with multi-reads or ambiguously mapped reads. This file is the output of step 4.
 * Output (Reads_with_highest_probable_location.sam): Output file contains multi-reads along with the most probable genomic location in sam file format. This file only contains those multi-reads for which a probable genomic location can be calculated using our model.
 
