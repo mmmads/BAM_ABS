@@ -65,7 +65,7 @@ Here,
 BAM_ABS folder also contains a file "snp_methylation_rate.txt". This file contains snp and methylation rate. If the user wants to change any rate, he or she needs to modify this file. Please do not delete this file or do not change the format of this file, only modify the rate part if necessary.
 
 ####Result
-This tool will generate one output file: Reads_with_highest_probable_location.sam. Reads_with_highest_probable_location.sam contains multi-reads along with the most probable genomic location in sam file format.
+This tool will generate one output file: Reads_with_highest_probable_location.sam. Reads_with_highest_probable_location.sam contains multi-reads along with the most probable genomic location in SAM format.
 
 ####Example
 * Input file:
