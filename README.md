@@ -61,7 +61,7 @@ Here,
 * Input argument 3 (unique_overlap_read_file): The file containing all uniquely mapped reads which are overlapped with multi-reads or ambiguously mapped reads in txt format (output of step 4)
 * Output (Reads_with_highest_probable_location.sam): Output file contains multi-reads along with the most probable genomic location in SAM format. This file only contains those multi-reads for which a probable genomic location can be calculated using our model.
 
-####Snp and Methylation Rate
+####SNP and Methylation Rate
 BAM_ABS folder also contains a file "snp_methylation_rate.txt". This file contains snp and methylation rate. If the user wants to change any rate, he or she needs to modify this file. Please do not delete this file or do not change the format of this file, only modify the rate part if necessary.
 
 ####Result
