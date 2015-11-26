@@ -29,7 +29,10 @@ a) Pre-process the input data:
 Step 1: Prior to execute this step, Samtools need to be installed on the system. After installing Samtools, run Samtools to get overlapped unique reads in sam format
 * Input: ambiguous reads in bed format, unique reads in bam format
 * Output: Unique reads in sam format with mapping quality greater than a given value
-samtools view -L ambiguous_read_file.bed all_unique_reads.bam -q 20 > unique_reads.sam   #Only retain reads with MAQ(Mapping Quality)>20 with no header
+
+samtools view -L ambiguous_read_file.bed all_unique_reads.bam -q 20 > unique_reads.sam   
+
+#Only retain reads with MAQ(Mapping Quality)>20 with no header
 
 Step 2: Run the following command to get rid of duplicates from the unique reads
 	Input: Unique reads in sam format (Output of step 1)
