@@ -1,12 +1,12 @@
 Author: Saima Sultana Tithi and Hong Tran
 
-###Introduction
+####Introduction
 BAM_ABS is a tool which simulates a Bayesian model that computes the posterior probability of mapping a multiread to each candidate genomic location, taking advantage of uniquely aligned reads. The inputs of this tool are a set of ambiguously mapped reads and a set of uniquely mapped reads from Bismark tool; and the output is the most probable genomic locations for those ambiguously mapped reads. The most probable genomic location is the location which has the highest calculated probability.
 
-###System Requirement
+####System Requirement
 This software package has been tested on Ubuntu 14.04 LTS. To run this program, user needs to have samtools, perl, bedtools, and g++ installed on his/her Linux/UNIX system. This program has been tested using g++ 4.8.4.
 
-###Compilation
+####Compilation
 If you receive BAM_ABS as a compressed file, first decompress it. Then use the following commands to create the executable file:
 ```
 make clean
@@ -17,8 +17,8 @@ For this command to work, the user needs g++ installed on his/her system. You ca
 sudo apt-get install g++
 ```
 	
-###Execution
-####a) Pre-process the input data:
+####Execution
+#####a) Pre-process the input data:
 Step 1: Prior to execute this step, Samtools need to be installed on the system. After installing Samtools, run Samtools to get overlapped unique reads in sam format
 * Input: ambiguous reads in bed format, unique reads in bam format
 * Output: Unique reads in sam format with mapping quality greater than a given value
@@ -49,7 +49,7 @@ Setp 4: Prior to execute this step, Bedtools need to be installed. After install
 ./intersectBed -a ambiguous_read_file.bed -b unique_reads_nodup.bed -wb -wa > unique_overlap_read_file.txt
 ```
 
-####b) Score the multi-reads:
+#####b) Score the multi-reads:
 Run main.exe in BAM_ABS folder using the following command:
 ```
 ./main file.fa ambiguous_read_file unique_overlap_read_file.txt
@@ -60,19 +60,19 @@ Here,
 * Input argument 3 (unique_overlap_read_file): The file containing all uniquely mapped reads which are overlapped with multi-reads or ambiguously mapped reads. This file is the output of step 4.
 * Output (Reads_with_highest_probable_location.sam): Output file contains multi-reads along with the most probable genomic location in sam file format. This file only contains those multi-reads for which a probable genomic location can be calculated using our model.
 
-###Snp and Methylation Rate
+####Snp and Methylation Rate
 BAM_ABS folder also contains a file "snp_methylation_rate.txt". This file contains snp and methylation rate. If the user wants to change any rate, he or she needs to modify this file. Please do not delete this file or do not change the format of this file, only modify the rate part if necessary.
 
-###Result
+####Result
 This tool will generate one output file: Reads_with_highest_probable_location.sam. Reads_with_highest_probable_location.sam contains multi-reads along with the most probable genomic location in sam file format.
 
-###Example
+####Example
 * Input file:
  1. Multiread file (in fastq format): L5_10_sample0.1_ambiguous_final
  2. Overlap uniquely mapped reads: L5_sample0.1_10_unique_overlap.txt
 * Output file: Multireads aligned to highest probable locations (in SAM format): Reads_with_highest_probable_location.sam
 
-BAM-ABS command line for the given example:
+BAM-ABS command for the given example:
 ```
 ./main $BAM_ABS_Home$/mm10.fa $BAM_ABS_Home$/Sample_input_output/input/L5_10_sample0.1_ambiguous_final $BAM_ABS_Home$/Sample_input_output/input/L5_sample0.1_10_unique_overlap.txt
 ```
