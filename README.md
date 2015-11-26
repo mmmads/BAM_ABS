@@ -20,7 +20,7 @@ sudo apt-get install g++
 ####Execution
 #####a) Pre-process the input data:
 _Step 1_: Prior to execute this step, Samtools need to be installed on the system. After installing Samtools, run Samtools to get overlapped unique reads in sam format
-* Input: ambiguous reads in bed format, unique reads in bam format
+* Input: ambiguous reads in bed format, unique reads in bam format (output of Bismark tool)
 * Output: Unique reads in sam format with mapping quality greater than a given value
 ```
 samtools view -L ambiguous_read_file.bed all_unique_reads.bam -q 20 > unique_reads.sam
