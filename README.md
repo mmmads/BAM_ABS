@@ -65,7 +65,7 @@ Run main.exe in BAM_ABS folder using the following command:
 Here,
 * Input argument 1 (file.fa): The reference file in Fasta format
 * Input argument 2 (ambiguous_read_file.sam): The file containing all ambiguously mapped reads in SAM format
-* Input argument 3 (unique_overlap_read_file): The file containing all uniquely mapped reads which are overlapped with multi-reads or ambiguously mapped reads in txt format (output of step 5)
+* Input argument 3 (unique_overlap_read_file.txt): The file containing all uniquely mapped reads which are overlapped with multi-reads or ambiguously mapped reads in txt format (output of step 5)
 * Output (Reads_with_highest_probable_location.sam): Output file contains multi-reads along with the most probable genomic location in SAM format. This file only contains those multi-reads for which a probable genomic location can be calculated using our model.
 
 ####SNP and Methylation Rate
@@ -77,7 +77,7 @@ This tool will generate one output file: Reads_with_highest_probable_location.sa
 ####Example
 * Input file:
  1. The reference file for mouse (in Fasta format): mm10.fa (you can download this file from http://hgdownload.cse.ucsc.edu/downloads.html#mouse)
- 2. Multiread file (in Fastq format): L5_10_sample0.1_ambiguous_final
+ 2. Multiread file (in SAM format): L5_10_sample0.1_ambiguous_final
  3. Overlapping uniquely mapped reads: L5_sample0.1_10_unique_overlap.txt
 * Output file: Multireads aligned to highest probable locations (in SAM format): Reads_with_highest_probable_location.sam
 
