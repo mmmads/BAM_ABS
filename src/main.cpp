@@ -50,7 +50,7 @@ double pSNP = 0.001;
 double CG = 0.85;
 double CH = 0.02;
 
-char getRevComp(char c) 
+char getRevComp(char c)
 {
     switch(c) {
         case 'A':
@@ -60,13 +60,13 @@ char getRevComp(char c)
         case 'C':
             return 'G';
         case 'G':
-            return 'C';    
+            return 'C';
         default:
             return c;
     }
 }
 
-double convertPhred33(char c) 
+double convertPhred33(char c)
 {
     int x = c - 33;
     return pow(10.0, (-x/10.0));
@@ -88,12 +88,12 @@ vector<string> split(const string &s, char delim) {
 }
 
 void prior(string seq, string genomicSeq, double phredArray[], double priorArr[])
-{    
+{
 	for (int i = 0; i < seq.length(); i++)
     {
 		priorArr[i] = 0.0;
 	}
-    
+
     for (int i = 0; i < seq.length(); i++)
     {
         if (phredArray[i] > 0)
@@ -109,7 +109,7 @@ void prior(string seq, string genomicSeq, double phredArray[], double priorArr[]
                     else if ( (i+1) == seq.length() && genomicSeq[i+1] == 'G')
                         priorArr[i] = pAC * CG;
                     else
-                        priorArr[i] = pAC * CH;                 
+                        priorArr[i] = pAC * CH;
                 }
                 else if (seq[i] == 'G')
                     priorArr[i] = pAG;
@@ -134,7 +134,7 @@ void prior(string seq, string genomicSeq, double phredArray[], double priorArr[]
                     else if ( (i+1) == seq.length() && genomicSeq[i+1] == 'G')
                         priorArr[i] = (1-pSNP) * CG;
                     else
-                        priorArr[i] = (1-pSNP) * CH;                
+                        priorArr[i] = (1-pSNP) * CH;
                 }
                 else if (seq[i] == 'G')
                     priorArr[i] = pCG;
@@ -159,7 +159,7 @@ void prior(string seq, string genomicSeq, double phredArray[], double priorArr[]
                     else if ( (i+1) == seq.length() && genomicSeq[i+1] == 'G')
                         priorArr[i] = pGC * CG;
                     else
-                        priorArr[i] = pGC * CH;                
+                        priorArr[i] = pGC * CH;
                 }
                 else if (seq[i] == 'G')
                     priorArr[i] = 1 - pSNP;
@@ -184,7 +184,7 @@ void prior(string seq, string genomicSeq, double phredArray[], double priorArr[]
                     else if ( (i+1) == seq.length() && genomicSeq[i+1] == 'G')
                         priorArr[i] = pTC * CG;
                     else
-                        priorArr[i] = pTC * CH;                
+                        priorArr[i] = pTC * CH;
                 }
                 else if (seq[i] == 'G')
                     priorArr[i] = pTG;
@@ -203,7 +203,7 @@ void prior(string seq, string genomicSeq, double phredArray[], double priorArr[]
 		{
             priorArr[i] = 1;
 		}
-    }    
+    }
 }
 
 double sum(double observedProb[], int size)
@@ -218,29 +218,29 @@ double sum(double observedProb[], int size)
 
 int main(int argc, char const ** argv)
 {
-	cout << "Start processing...\n";	
+	cout << "Start processing...\n";
 	if (argc != 4)
     {
         cout << "USAGE: ./main file.fa ambiguous_read_file unique_overlap_read_file\n";
         return 1;
-    } 
-	
+    }
+
 	// Try to load index and create on the fly if necessary.
 	seqan::FaiIndex faiIndex;
 	if (seqan::read(faiIndex, argv[1]) != 0)
 	{
 		if (build(faiIndex, argv[1]) != 0)
 		{
-		    cout << "ERROR: Fasta file index could not be loaded or built.\n";
+		    cout << "ERROR: Fai index file could not be loaded or built.\n";
 		    return 1;
 		}
 		if (write(faiIndex) != 0)  // Name is stored from when reading.
 		{
-		    cout << "ERROR: Fasta file index could not be written do disk.\n";
+		    cout << "ERROR: Fai index file could not be written to disk.\n";
 		    return 1;
 		}
 	}
-   
+
     string line;
 	double rate[15];
 	int lineNum = 0;
@@ -257,14 +257,14 @@ int main(int argc, char const ** argv)
 	else {
 		cout << "ERROR: Snp and methylation rate file could not be loaded.\n";
 	    return 1;
-	}	
+	}
 
 	if(rate[0] <= 0 || rate[0] >=1) {
 		pAC = 0.00025;
-		cout << "ERROR: pAC could not be read. The default value is used.\n"; 
+		cout << "ERROR: pAC could not be read. The default value is used.\n";
 	}
 	else
-		pAC = rate[0];	
+		pAC = rate[0];
 	if(rate[1] <= 0 || rate[1] >=1) {
 		pAT = 0.00025;
 		cout << "ERROR: pAT could not be read. The default value is used.\n";
@@ -295,13 +295,13 @@ int main(int argc, char const ** argv)
 	}
 	else
 		pCG = rate[5];
-	if(rate[6] <= 0 || rate[6] >=1) { 
+	if(rate[6] <= 0 || rate[6] >=1) {
 		pTC = 0.0005;
 		cout << "ERROR: pTC could not be read. The default value is used.\n";
 	}
 	else
 		pTC = rate[6];
-	if(rate[7] <= 0 || rate[7] >=1) { 
+	if(rate[7] <= 0 || rate[7] >=1) {
 		pTA = 0.00025;
 		cout << "ERROR: pTA could not be read. The default value is used.\n";
 	}
@@ -324,7 +324,7 @@ int main(int argc, char const ** argv)
 		cout << "ERROR: pGT could not be read. The default value is used.\n";
 	}
 	else
-		pGT = rate[10];	
+		pGT = rate[10];
 	if(rate[11] <= 0 || rate[11] >=1) {
 		pGC = 0.00025;
 		cout << "ERROR: pGC could not be read. The default value is used.\n";
@@ -350,7 +350,7 @@ int main(int argc, char const ** argv)
 	else
 		CH = rate[14];
 	//cout << pAC << "," << pAT << "," << pAG << "," << pCA << "," << pCT << "," << pCG << "," << pTC << "," << pTA << "," << pTG << "," << pGA << "," << pGT << "," << pGC << "," << pSNP << "," << CG << "," << CH << endl;
-		
+
 	AmbiguousMap myAmbMap;
     ifstream myfileAmb(argv[2]);
     if (myfileAmb.is_open()) {
@@ -366,7 +366,7 @@ int main(int argc, char const ** argv)
 	else {
 		cout << "ERROR: Ambiguous read file could not be loaded.\n";
 	    return 1;
-	}	
+	}
 
 	/*
 	int MAPQ = atoi(argv[4]);
@@ -374,19 +374,16 @@ int main(int argc, char const ** argv)
 		cout << "MAPQ value is not between 0 and 255. The default value 30 is used.\n";
 		MAPQ = 30;
 	}*/
-		
-	UniqueMap myUniMap;    
+
+	UniqueMap myUniMap;
     ifstream myfileUni(argv[3]);
     if (myfileUni.is_open()) {
         while (getline(myfileUni, line)) {
             vector<string> tokens = split(line, '\t');
-			int multireadFlag = atoi(tokens.at(4).c_str());
-            int unireadFlag = atoi(tokens.at(9).c_str());
-			//if (multireadFlag == unireadFlag && atoi(tokens.at(10).c_str()) > MAPQ) {
-			if (multireadFlag == unireadFlag) {
+			if(tokens.at(4).compare(tokens.at(9))) {
 		        string key = tokens.at(3) + "_" + tokens.at(0) + "_" + tokens.at(1);
-		        string value = tokens.at(4) + "\t" + tokens.at(6) + "\t" + tokens.at(10) 
-		                + "\t" + tokens.at(11) + "\t" + tokens.at(12) + "\t" + tokens.at(13) 
+		        string value = tokens.at(4) + "\t" + tokens.at(6) + "\t" + tokens.at(10)
+		                + "\t" + tokens.at(11) + "\t" + tokens.at(12) + "\t" + tokens.at(13)
 		                + "\t" + tokens.at(14) + "\t" + tokens.at(15) + "\t" + tokens.at(16);
 		        myUniMap.insert(make_pair(key, value));
 			}
@@ -430,25 +427,28 @@ int main(int argc, char const ** argv)
             string phred33 = tokens.at(9);
 
 			double multiSeqErr[phred33.length()];
-    
+
             for (int i = 0; i < phred33.length(); i++)
             {
-               multiSeqErr[i] = convertPhred33(phred33[i]); 
+               multiSeqErr[i] = convertPhred33(phred33[i]);
             }
 
 			//get the genome seq using seqan library
-            string genomicSeq;			
+            string genomicSeq;
 
 			// Translate sequence name to index.
 			unsigned idx = 0;
 			if (!getIdByName(faiIndex, tokens.at(1), idx))
 			{
-				std::cerr << "ERROR: Index does not know about sequence " << tokens.at(1) << "\n";
-				return 1;
+				if (!getIdByName(faiIndex, "chr" + tokens.at(1), idx))
+                {
+                    std::cerr << "ERROR: FAI index file has no entry for chromosome " << tokens.at(1) << "\n";
+                    return 1;
+                }
 			}
 			//unsigned seqLength = sequenceLength(faiIndex, idx);
 			//cout << seqLength << "\n";
-			
+
 			// Load characters of chromosome
 			seqan::CharString seqChrPrefix;
 			unsigned startPos = atoi(tokens.at(2).c_str()) - 2;
@@ -460,7 +460,7 @@ int main(int argc, char const ** argv)
 				return 1;
 			}
 			//cout << "Seq:" << seqChrPrefix << "\n";
-						
+
 			std::stringstream stream;
 			stream<<seqChrPrefix;
 
@@ -471,42 +471,42 @@ int main(int argc, char const ** argv)
 				string revGenomicSeq(genomicSeq);
 				for (int i = 0; i < genomicSeq.length(); i++)
                 {
-                   revGenomicSeq[genomicSeq.length() - 1 -i] = getRevComp(genomicSeq[i]); 
+                   revGenomicSeq[genomicSeq.length() - 1 -i] = getRevComp(genomicSeq[i]);
                 }
 				genomicSeq = revGenomicSeq;
 			}
 			genomicSeq = genomicSeq.substr(1);
-			
-			double priorArr[seq.length()];
-            prior(seq, genomicSeq, multiSeqErr, priorArr);		
 
-            if(flag == 16 || flag == 272) {   
+			double priorArr[seq.length()];
+            prior(seq, genomicSeq, multiSeqErr, priorArr);
+
+            if(flag == 16 || flag == 272) {
     			double revPriorArr[seq.length()];
 				for (int i = 0; i < seq.length(); i++)
                 {
-                   revPriorArr[seq.length() - 1 -i] = priorArr[i]; 
+                   revPriorArr[seq.length() - 1 -i] = priorArr[i];
                 }
 				for (int i = 0; i < seq.length(); i++)
                 {
-                   priorArr[i] = revPriorArr[i]; 
+                   priorArr[i] = revPriorArr[i];
                 }
 
 				double revMultiSeqErr[phred33.length()];
 				for (int i = 0; i < phred33.length(); i++)
                 {
-                   revMultiSeqErr[phred33.length() - 1 -i] = multiSeqErr[i]; 
+                   revMultiSeqErr[phred33.length() - 1 -i] = multiSeqErr[i];
                 }
 				for (int i = 0; i < phred33.length(); i++)
                 {
-                   multiSeqErr[i] = revMultiSeqErr[i]; 
+                   multiSeqErr[i] = revMultiSeqErr[i];
                 }
 
                 for (int i = 0; i < seq.length(); i++)
                 {
-                   seq[tokens.at(8).length() - 1 -i] = getRevComp(tokens.at(8)[i]); 
+                   seq[tokens.at(8).length() - 1 -i] = getRevComp(tokens.at(8)[i]);
                 }
             }
-			
+
             double observed[seq.length()];
 			//initialize observed array
 			for(int a = 0; a < seq.length(); a++)
@@ -520,13 +520,13 @@ int main(int argc, char const ** argv)
 			{
 				posterior[a] = 0.0;
 			}
-            
+
             string theUniKey = theKey + "_" + tokens.at(1) + "_" + tokens.at(2);
             if (myUniMap.count(theUniKey) != 0)
             {
                 pair<mapUniIter, mapUniIter> keyRangeUni = myUniMap.equal_range(theUniKey);
-                
-                for (int i = 0; i < seq.length(); i++) 
+
+                for (int i = 0; i < seq.length(); i++)
                 {
                     if (multiSeqErr[i] > 0)
                     {
@@ -536,19 +536,19 @@ int main(int argc, char const ** argv)
 						{
 							observedProb[a] = 0.0;
 						}
-	
-                        int baseTotal = 0;                       
+
+                        int baseTotal = 0;
                         // Iterate over all map elements with key == theUniKey
                         for (sUni_it = keyRangeUni.first;  sUni_it != keyRangeUni.second;  ++sUni_it)
                         {
                             string theUniValue = (*sUni_it).second;
                             vector<string> uniTokens = split(theUniValue, '\t');
-                            
+
                             double uniSeqErr[uniTokens.at(8).length()];
-    
+
                             for (unsigned x = 0; x < uniTokens.at(8).length(); x++)
                             {
-                               uniSeqErr[x] = convertPhred33(uniTokens.at(8)[x]); 
+                               uniSeqErr[x] = convertPhred33(uniTokens.at(8)[x]);
                             }
                             unsigned ambPos = atoi(tokens.at(2).c_str());
                             unsigned uniPos = atoi(uniTokens.at(1).c_str());
@@ -556,12 +556,12 @@ int main(int argc, char const ** argv)
                             {
                                 if(uniTokens.at(7).at(ambPos+i-uniPos) == seq[i])
                                 {
-                                    observedProb[baseTotal] = 1 - uniSeqErr[ambPos+i-uniPos] 
+                                    observedProb[baseTotal] = 1 - uniSeqErr[ambPos+i-uniPos]
                                             - multiSeqErr[i] + (uniSeqErr[ambPos+i-uniPos] * multiSeqErr[i]);
                                 }
                                 else
                                 {
-                                    observedProb[baseTotal] = uniSeqErr[ambPos+i-uniPos] 
+                                    observedProb[baseTotal] = uniSeqErr[ambPos+i-uniPos]
                                             + multiSeqErr[i] - (uniSeqErr[ambPos+i-uniPos] * multiSeqErr[i]);
                                 }
                                 baseTotal++;
@@ -577,7 +577,7 @@ int main(int argc, char const ** argv)
                         }
 						double value = (priorArr[i] * observed[i]) / (priorArr[i] * observed[i] + (1-priorArr[i]) * (1-observed[i]));
 						//std::cout << std::setprecision(15) << value << "\n";
-						
+
 						if (value > 0)
 							posterior[i] = log10(value);
                     }
@@ -601,20 +601,20 @@ int main(int argc, char const ** argv)
 				//outputfile << output;
 				//outputfile << 999 << "\n";
             }
-		
+
         }//end for
 		if(!likelihoodArr.empty()) {
 			vector<double>::const_iterator it;
 			it = std::max_element(likelihoodArr.begin(), likelihoodArr.end());
 			std::map<double, std::string>::const_iterator search = likelihoodMap.find(*it);
 			outputfile1 << search->second << "\n";
-			//outputfile1 << std::setprecision(15) << *it << "\n";	
+			//outputfile1 << std::setprecision(15) << *it << "\n";
 		}
     }//end for
 
-	//outputfile.close(); 
+	//outputfile.close();
 	outputfile1.close();
-	cout << "Output is written in Reads_with_highest_probable_location.sam\n"; 
-	
+	cout << "Output is written in Reads_with_highest_probable_location.sam\n";
+
     return 0;
 }
