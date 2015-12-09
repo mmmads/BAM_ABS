@@ -28,12 +28,6 @@
 
 using namespace std;
 
-typedef multimap<string, string> AmbiguousMap;
-typedef AmbiguousMap::iterator mapAmbIter;
-
-typedef multimap<string, string> UniqueMap;
-typedef UniqueMap::iterator mapUniIter;
-
 double pAC = 0.00025;
 double pAT = 0.00025;
 double pAG = 0.0005;
@@ -218,7 +212,6 @@ double sum(double observedProb[], int size)
 
 int main(int argc, char const ** argv)
 {
-	cout << "Start processing...\n";
 	if (argc != 4)
     {
         cout << "USAGE: ./main file.fa ambiguous_read_file unique_overlap_read_file\n";
@@ -231,12 +224,12 @@ int main(int argc, char const ** argv)
 	{
 		if (build(faiIndex, argv[1]) != 0)
 		{
-		    cout << "ERROR: Fai index file could not be loaded or built.\n";
+		    cout << "ERROR: FAI index file could not be loaded or built.\n";
 		    return 1;
 		}
 		if (write(faiIndex) != 0)  // Name is stored from when reading.
 		{
-		    cout << "ERROR: Fai index file could not be written to disk.\n";
+		    cout << "ERROR: FAI index file could not be written to disk.\n";
 		    return 1;
 		}
 	}
@@ -349,9 +342,8 @@ int main(int argc, char const ** argv)
 	}
 	else
 		CH = rate[14];
-	//cout << pAC << "," << pAT << "," << pAG << "," << pCA << "," << pCT << "," << pCG << "," << pTC << "," << pTA << "," << pTG << "," << pGA << "," << pGT << "," << pGC << "," << pSNP << "," << CG << "," << CH << endl;
 
-	AmbiguousMap myAmbMap;
+    std::map<string, std::list<string> > myAmbHashMap;
     ifstream myfileAmb(argv[2]);
     if (myfileAmb.is_open()) {
         while (getline(myfileAmb, line)) {
@@ -359,7 +351,7 @@ int main(int argc, char const ** argv)
             string key = line.substr(0, pos);
             string value = line.substr(pos);
             value.erase(0, value.find_first_not_of('\t'));
-            myAmbMap.insert(make_pair(key, value));
+            myAmbHashMap[key].push_back(value);
         }
         myfileAmb.close();
     }
@@ -367,66 +359,56 @@ int main(int argc, char const ** argv)
 		cout << "ERROR: Ambiguous read file could not be loaded.\n";
 	    return 1;
 	}
+	cout << "Finished loading the ambiguous reads\n";
 
-	/*
-	int MAPQ = atoi(argv[4]);
-	if(MAPQ < 0 || MAPQ > 255) {
-		cout << "MAPQ value is not between 0 and 255. The default value 30 is used.\n";
-		MAPQ = 30;
-	}*/
-
-	UniqueMap myUniMap;
+    std::map<string, std::list<string> > myUniHashMap;
     ifstream myfileUni(argv[3]);
     if (myfileUni.is_open()) {
         while (getline(myfileUni, line)) {
             vector<string> tokens = split(line, '\t');
-			if(tokens.at(4).compare(tokens.at(9))) {
+            int multireadFlag = atoi(tokens.at(4).c_str());
+            int unireadFlag = atoi(tokens.at(9).c_str());
+			if (multireadFlag == unireadFlag) {
 		        string key = tokens.at(3) + "_" + tokens.at(0) + "_" + tokens.at(1);
 		        string value = tokens.at(4) + "\t" + tokens.at(6) + "\t" + tokens.at(10)
 		                + "\t" + tokens.at(11) + "\t" + tokens.at(12) + "\t" + tokens.at(13)
 		                + "\t" + tokens.at(14) + "\t" + tokens.at(15) + "\t" + tokens.at(16);
-		        myUniMap.insert(make_pair(key, value));
+		        myUniHashMap[key].push_back(value);
 			}
+            vector<string>().swap(tokens);
         }
         myfileUni.close();
     }
 	else {
-		cout << "ERROR: Unique overlap read file could not be loaded.\n";
+		cout << "ERROR: Unique overlap read file could not be loaded." << endl;
 	    return 1;
 	}
+	cout << "Finished loading the unique overlapped reads" << endl;
+    cout << "Start processing..." << endl;
 
-	//ofstream outputfile;
-  	//outputfile.open ("All_reads_with_probability.txt");
-	ofstream outputfile1;
-  	outputfile1.open ("Reads_with_highest_probable_location.sam");
+	ofstream outputfile1("Reads_with_highest_probable_location.sam");
 
-	//string header = "#All multi-reads in sam format with probability(999 means probability cannot be calculated)\n";
-	//string header1 = "#Multi-reads having the highest probability\n";
-
-	//outputfile << header;
-	//outputfile1 << header1;
-
-    mapAmbIter m_it, s_it;
-    mapUniIter mUni_it, sUni_it;
-
-    for (m_it = myAmbMap.begin();  m_it != myAmbMap.end();  m_it = s_it)
+    for(std::map<string, std::list<string> >::iterator m_it = myAmbHashMap.begin(); m_it!= myAmbHashMap.end(); m_it++)
     {
         string theKey = (*m_it).first;
-        pair<mapAmbIter, mapAmbIter> keyRange = myAmbMap.equal_range(theKey);
-
-        // Iterate over all map elements with key == theKey
+        std::list<string> myAmbList = m_it->second;
 		vector<double> likelihoodArr;
 		std::map<double, std::string> likelihoodMap;
 		string output = "";
-        for (s_it = keyRange.first;  s_it != keyRange.second;  ++s_it)
+
+        for(std::list<string>::iterator s_it = myAmbList.begin(); s_it!= myAmbList.end(); s_it++)
         {
-            string theValue = (*s_it).second;
+            string theValue = *s_it;
             vector<string> tokens = split(theValue, '\t');
             unsigned flag = atoi(tokens.at(0).c_str());
             string seq = tokens.at(8);
             string phred33 = tokens.at(9);
-
 			double multiSeqErr[phred33.length()];
+
+			for (int i = 0; i < phred33.length(); i++)
+            {
+               multiSeqErr[i] = 0.0;
+            }
 
             for (int i = 0; i < phred33.length(); i++)
             {
@@ -435,21 +417,18 @@ int main(int argc, char const ** argv)
 
 			//get the genome seq using seqan library
             string genomicSeq;
-
 			// Translate sequence name to index.
 			unsigned idx = 0;
+
 			if (!getIdByName(faiIndex, tokens.at(1), idx))
 			{
-				if (!getIdByName(faiIndex, "chr" + tokens.at(1), idx))
-                {
-                    std::cerr << "ERROR: FAI index file has no entry for chromosome " << tokens.at(1) << "\n";
-                    return 1;
-                }
+				if(!getIdByName(faiIndex, "chr" + tokens.at(1), idx))
+				{
+					std::cerr << "ERROR: FAI index has no entry for chromosome " << tokens.at(1) << "\n";
+					return 1;
+				}
 			}
-			//unsigned seqLength = sequenceLength(faiIndex, idx);
-			//cout << seqLength << "\n";
 
-			// Load characters of chromosome
 			seqan::CharString seqChrPrefix;
 			unsigned startPos = atoi(tokens.at(2).c_str()) - 2;
 			unsigned endPos = startPos + seq.length() + 2;
@@ -459,13 +438,11 @@ int main(int argc, char const ** argv)
 				std::cerr << "ERROR: Could not load reference sequence.\n";
 				return 1;
 			}
-			//cout << "Seq:" << seqChrPrefix << "\n";
 
 			std::stringstream stream;
 			stream<<seqChrPrefix;
 
 			genomicSeq = stream.str();
-			//std::cout << genomicSeq.length() << "\n";
 
 			if(flag == 16 || flag == 272) {
 				string revGenomicSeq(genomicSeq);
@@ -476,8 +453,11 @@ int main(int argc, char const ** argv)
 				genomicSeq = revGenomicSeq;
 			}
 			genomicSeq = genomicSeq.substr(1);
-
 			double priorArr[seq.length()];
+			for (int i = 0; i < seq.length(); i++)
+            {
+               priorArr[i] = 0.0;
+            }
             prior(seq, genomicSeq, multiSeqErr, priorArr);
 
             if(flag == 16 || flag == 272) {
@@ -520,101 +500,101 @@ int main(int argc, char const ** argv)
 			{
 				posterior[a] = 0.0;
 			}
-
             string theUniKey = theKey + "_" + tokens.at(1) + "_" + tokens.at(2);
-            if (myUniMap.count(theUniKey) != 0)
+            if (myUniHashMap.count(theUniKey) != 0)
             {
-                pair<mapUniIter, mapUniIter> keyRangeUni = myUniMap.equal_range(theUniKey);
-
-                for (int i = 0; i < seq.length(); i++)
+                std::list<string> myUniList = myUniHashMap[theUniKey];
+                for (int index = 0; index < seq.length(); index++)
                 {
-                    if (multiSeqErr[i] > 0)
+                    if (multiSeqErr[index] > 0)
                     {
-                        double observedProb[seq.length()];
+                        double observedProb[myUniList.size()];
 						//initialize observedProb array
-						for(int a = 0; a < seq.length(); a++)
+						for(int a = 0; a < myUniList.size(); a++)
 						{
 							observedProb[a] = 0.0;
 						}
 
                         int baseTotal = 0;
                         // Iterate over all map elements with key == theUniKey
-                        for (sUni_it = keyRangeUni.first;  sUni_it != keyRangeUni.second;  ++sUni_it)
+                        for(std::list<string>::iterator sUni_it = myUniList.begin(); sUni_it!= myUniList.end(); sUni_it++)
                         {
-                            string theUniValue = (*sUni_it).second;
+                            string theUniValue = (*sUni_it);
                             vector<string> uniTokens = split(theUniValue, '\t');
-
                             double uniSeqErr[uniTokens.at(8).length()];
-
-                            for (unsigned x = 0; x < uniTokens.at(8).length(); x++)
+                            for (int x = 0; x < uniTokens.at(8).length(); x++)
+                            {
+                               uniSeqErr[x] = 0.0;
+                            }
+                            for (int x = 0; x < uniTokens.at(8).length(); x++)
                             {
                                uniSeqErr[x] = convertPhred33(uniTokens.at(8)[x]);
                             }
                             unsigned ambPos = atoi(tokens.at(2).c_str());
                             unsigned uniPos = atoi(uniTokens.at(1).c_str());
-                            if(uniPos <= (ambPos+i) && (uniPos+uniTokens.at(7).length()-1) >= (ambPos+i))
+                            if(index < phred33.length() && uniPos <= (ambPos+index)
+                                && (uniPos+uniTokens.at(7).length()-1) >= (ambPos+index))
                             {
-                                if(uniTokens.at(7).at(ambPos+i-uniPos) == seq[i])
+                                if(uniTokens.at(7).at(ambPos+index-uniPos) == seq[index])
                                 {
-                                    observedProb[baseTotal] = 1 - uniSeqErr[ambPos+i-uniPos]
-                                            - multiSeqErr[i] + (uniSeqErr[ambPos+i-uniPos] * multiSeqErr[i]);
+                                    observedProb[baseTotal] = 1 - uniSeqErr[ambPos+index-uniPos]
+                                            - multiSeqErr[index] + (uniSeqErr[ambPos+index-uniPos] * multiSeqErr[index]);
                                 }
                                 else
                                 {
-                                    observedProb[baseTotal] = uniSeqErr[ambPos+i-uniPos]
-                                            + multiSeqErr[i] - (uniSeqErr[ambPos+i-uniPos] * multiSeqErr[i]);
+                                    observedProb[baseTotal] = uniSeqErr[ambPos+index-uniPos]
+                                            + multiSeqErr[index] - (uniSeqErr[ambPos+index-uniPos] * multiSeqErr[index]);
                                 }
                                 baseTotal++;
                             }
-                        }
+                            uniTokens.clear();
+                            vector<string>().swap(uniTokens);
+                        } //end for
                         if (baseTotal != 0)
                         {
-                            observed[i] = sum(observedProb, seq.length()) / baseTotal;
+                            observed[index] = sum(observedProb, myUniList.size()) / baseTotal;
                         }
                         else
                         {
-                            observed[i] = 0.999999999999999;
+                            observed[index] = 0.999999999999999;
                         }
-						double value = (priorArr[i] * observed[i]) / (priorArr[i] * observed[i] + (1-priorArr[i]) * (1-observed[i]));
-						//std::cout << std::setprecision(15) << value << "\n";
-
+						double value = (priorArr[index] * observed[index]) / (priorArr[index] * observed[index] + (1-priorArr[index]) * (1-observed[index]));
 						if (value > 0)
-							posterior[i] = log10(value);
+							posterior[index] = log10(value);
                     }
                     else
                     {
-                        posterior[i] = 0.0;
+                        posterior[index] = 0.0;
                     }
                 }//end for
 				double likelihood = sum(posterior, seq.length());
-				//output = theKey + "\t" + tokens.at(1) + "_" + tokens.at(2) + "\t";
 				output = theKey + "\t" + theValue + "\t";
-				//outputfile << output;
-				//outputfile << std::setprecision(15) << likelihood << "\n";
 				likelihoodArr.push_back(likelihood);
 				likelihoodMap[likelihood] = output;
             }
             else
             {
-				//output = theKey + "\t" + tokens.at(1) + "_" + tokens.at(2) + "\t";
 				output = theKey + "\t" + theValue + "\t";
-				//outputfile << output;
-				//outputfile << 999 << "\n";
             }
-
+            tokens.clear();
+            vector<string>().swap(tokens);
         }//end for
 		if(!likelihoodArr.empty()) {
 			vector<double>::const_iterator it;
 			it = std::max_element(likelihoodArr.begin(), likelihoodArr.end());
 			std::map<double, std::string>::const_iterator search = likelihoodMap.find(*it);
-			outputfile1 << search->second << "\n";
-			//outputfile1 << std::setprecision(15) << *it << "\n";
+			if(outputfile1.is_open()) {
+				outputfile1 << search->second << "\n";
+			}
+			else
+			{
+			    cout << "ERROR: Output could not be written in the file" << endl;
+			}
 		}
     }//end for
 
-	//outputfile.close();
 	outputfile1.close();
-	cout << "Output is written in Reads_with_highest_probable_location.sam\n";
+	cout << "Output is written in Reads_with_highest_probable_location.sam" << endl;
 
     return 0;
 }
