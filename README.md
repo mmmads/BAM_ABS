@@ -60,7 +60,7 @@ _Setp 5_: Prior to execute this step, Bedtools need to be installed. After insta
 #####b) Score the multi-reads:
 Run main.exe in BAM_ABS folder using the following command:
 ```
-./main file.fa ambiguous_read_file unique_overlap_read_file.txt
+./main file.fa ambiguous_read_file.sam unique_overlap_read_file.txt
 ```
 Here,
 * Input argument 1 (file.fa): The reference file in Fasta format
