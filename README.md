@@ -19,7 +19,7 @@ sudo apt-get install g++
 	
 ####Execution
 #####a) Pre-process the input data:
-_Step 1_: If Perl is not installed in the system, then prior to this step, Perl needs to be installed. Run Convert_to_bed_unite.pl to convert ambiguous read file to bed format. Convert_to_bed_unite.pl has two options --ambiguous and --unique to indicate whether the input file is ambiguous alignments or unique alignments.
+_Step 1_: If Perl is not installed in the system, then prior to this step, Perl needs to be installed. Convert_to_bed_unite.pl has two options --ambiguous and --unique to indicate whether the input file is ambiguous alignments or unique alignments. Here, run Convert_to_bed_unite.pl to convert ambiguous read file to bed format with --ambiguous option.
 * Input: Ambiguous reads in SAM format (output of Bismark tool)
 * Output: Ambiguous reads in BED format (ambiguous_read_file.bed)
 ```
@@ -42,7 +42,7 @@ _Step 3_: Run the following command to get rid of duplicates from the unique rea
 sort -n -r -k3,3 -k4,4 -k5,5 unique_reads.sam|uniq -u > unique_reads_nodup.sam
 ```
 
-_Step 4_: If Perl is not installed in the system, then prior to this step, Perl needs to be installed. Run Convert_to_bed_unite.pl to convert unique read file to bed format.
+_Step 4_: If Perl is not installed in the system, then prior to this step, Perl needs to be installed. Run Convert_to_bed_unite.pl to convert unique read file to bed format with --unique option.
 * Input: Unique reads with no duplicate in SAM format (output of step 3)
 * Output: Unique reads with no duplicate in BED format (unique_reads_nodup.bed)
 ```
