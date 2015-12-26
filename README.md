@@ -19,7 +19,7 @@ sudo apt-get install g++
 	
 ####Execution
 #####a) Pre-process the input data:
-_Step 1_: If Perl is not installed in the system, then prior to this step, Perl needs to be installed. Run Convert_to_bed_unite.pl to convert ambiguous read file to bed format. Convert_to_bed_unite.pl has two options --ambiguous and --unique to indicate whether the input file is ambiguous alignments or unique alignmenta.
+_Step 1_: If Perl is not installed in the system, then prior to this step, Perl needs to be installed. Run Convert_to_bed_unite.pl to convert ambiguous read file to bed format. Convert_to_bed_unite.pl has two options --ambiguous and --unique to indicate whether the input file is ambiguous alignments or unique alignments.
 * Input: Ambiguous reads in SAM format (output of Bismark tool)
 * Output: Ambiguous reads in BED format (ambiguous_read_file.bed)
 ```
